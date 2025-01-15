@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import debounce from 'lodash.debounce';
-import { useRecoilValue } from 'recoil';
+import { useCallback, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { TextInput } from '@/ui/input/components/TextInput';
+import isEmpty from 'lodash.isempty';
 import { useUpdateWorkspaceMutation } from '~/generated/graphql';
+import { isDefined } from '~/utils/isDefined';
+import { isUndefinedOrNull } from '~/utils/isUndefinedOrNull';
 import { logError } from '~/utils/logError';
 
 const StyledComboInputContainer = styled.div`
@@ -26,6 +29,7 @@ export const NameField = ({
   onNameUpdate,
 }: NameFieldProps) => {
   const currentWorkspace = useRecoilValue(currentWorkspaceState);
+  const setCurrentWorkspace = useSetRecoilState(currentWorkspaceState);
 
   const [displayName, setDisplayName] = useState(
     currentWorkspace?.displayName ?? '',
@@ -36,8 +40,20 @@ export const NameField = ({
   // TODO: Enhance this with react-web-hook-form (https://www.react-hook-form.com)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdate = useCallback(
-    debounce(async (name: string) => {
-      if (onNameUpdate) {
+    useDebouncedCallback(async (name: string) => {
+      if (isEmpty(name)) return;
+      // update local recoil state when workspace name is updated
+      setCurrentWorkspace((currentValue) => {
+        if (currentValue === null) {
+          return null;
+        }
+
+        return {
+          ...currentValue,
+          displayName: name,
+        };
+      });
+      if (isDefined(onNameUpdate)) {
         onNameUpdate(displayName);
       }
       if (!autoSave || !name) {
@@ -52,14 +68,14 @@ export const NameField = ({
           },
         });
 
-        if (errors || !data?.updateWorkspace) {
+        if (isDefined(errors) || isUndefinedOrNull(data?.updateWorkspace)) {
           throw errors;
         }
       } catch (error) {
         logError(error);
       }
     }, 500),
-    [updateWorkspace],
+    [updateWorkspace, setCurrentWorkspace],
   );
 
   useEffect(() => {

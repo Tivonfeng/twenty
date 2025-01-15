@@ -1,8 +1,8 @@
-import { atom } from 'recoil';
+import { createState } from '@ui/utilities/state/utils/createState';
 
-import { Filter } from '@/object-record/object-filter-dropdown/types/Filter';
+import { RecordFilter } from '@/object-record/record-filter/types/RecordFilter';
 
-export const recordIndexFiltersState = atom<Filter[]>({
+export const recordIndexFiltersState = createState<RecordFilter[]>({
   key: 'recordIndexFiltersState',
-  default: [],
+  defaultValue: [],
 });

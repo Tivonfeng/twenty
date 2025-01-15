@@ -1,25 +1,33 @@
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { isCurrentWorkspaceActiveSelector } from '@/auth/states/selectors/isCurrentWorkspaceActiveSelector';
 import { ObjectMetadataItemsLoadEffect } from '@/object-metadata/components/ObjectMetadataItemsLoadEffect';
+import { PreComputedChipGeneratorsProvider } from '@/object-metadata/components/PreComputedChipGeneratorsProvider';
 import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
-import { RelationPickerScope } from '@/object-record/relation-picker/scopes/RelationPickerScope';
+import { RecordPickerComponentInstanceContext } from '@/object-record/relation-picker/states/contexts/RecordPickerComponentInstanceContext';
+import { RelationPickerHotkeyScope } from '@/object-record/relation-picker/types/RelationPickerHotkeyScope';
+import { UserOrMetadataLoader } from '~/loading/components/UserOrMetadataLoader';
 
 export const ObjectMetadataItemsProvider = ({
   children,
 }: React.PropsWithChildren) => {
   const objectMetadataItems = useRecoilValue(objectMetadataItemsState);
-  const isCurrentWorkspaceActive = useRecoilValue(
-    isCurrentWorkspaceActiveSelector,
-  );
+
+  const shouldDisplayChildren = objectMetadataItems.length > 0;
 
   return (
     <>
       <ObjectMetadataItemsLoadEffect />
-      {(!isCurrentWorkspaceActive || !!objectMetadataItems.length) && (
-        <RelationPickerScope relationPickerScopeId="relation-picker">
-          {children}
-        </RelationPickerScope>
+      {shouldDisplayChildren ? (
+        <PreComputedChipGeneratorsProvider>
+          <RecordPickerComponentInstanceContext.Provider
+            value={{ instanceId: RelationPickerHotkeyScope.RelationPicker }}
+          >
+            {children}
+          </RecordPickerComponentInstanceContext.Provider>
+        </PreComputedChipGeneratorsProvider>
+      ) : (
+        <UserOrMetadataLoader />
       )}
     </>
   );

@@ -1,6 +1,7 @@
-import { isArray } from '@sniptt/guards';
+import { isArray, isNonEmptyString } from '@sniptt/guards';
 
-export const getActivitySummary = (activityBody: string) => {
+// TODO: merge with getFirstNonEmptyLineOfRichText
+export const getActivitySummary = (activityBody: string | null) => {
   const noteBody = activityBody ? JSON.parse(activityBody) : [];
 
   if (!noteBody.length) {
@@ -13,7 +14,7 @@ export const getActivitySummary = (activityBody: string) => {
     return '';
   }
 
-  if (firstNoteBlockContent.text) {
+  if (isNonEmptyString(firstNoteBlockContent.text)) {
     return noteBody[0].content.text;
   }
 

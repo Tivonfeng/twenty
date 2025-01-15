@@ -6,6 +6,7 @@ import { isDefined } from '~/utils/isDefined';
 
 export const useRegisterInputEvents = <T>({
   inputRef,
+  copyRef,
   inputValue,
   onEscape,
   onEnter,
@@ -15,22 +16,22 @@ export const useRegisterInputEvents = <T>({
   hotkeyScope,
 }: {
   inputRef: React.RefObject<any>;
+  copyRef?: React.RefObject<any>;
   inputValue: T;
-  onEscape: (inputValue: T) => void;
-  onEnter: (inputValue: T) => void;
+  onEscape?: (inputValue: T) => void;
+  onEnter?: (inputValue: T) => void;
   onTab?: (inputValue: T) => void;
   onShiftTab?: (inputValue: T) => void;
   onClickOutside?: (event: MouseEvent | TouchEvent, inputValue: T) => void;
   hotkeyScope: string;
 }) => {
   useListenClickOutside({
-    refs: [inputRef],
+    refs: [inputRef, copyRef].filter(isDefined),
     callback: (event) => {
-      event.stopImmediatePropagation();
-
       onClickOutside?.(event, inputValue);
     },
     enabled: isDefined(onClickOutside),
+    listenerId: hotkeyScope,
   });
 
   useScopedHotkeys(

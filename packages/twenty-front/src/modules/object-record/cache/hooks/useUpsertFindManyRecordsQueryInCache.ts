@@ -1,12 +1,12 @@
 import { useApolloClient } from '@apollo/client';
+import { useRecoilValue } from 'recoil';
 
-import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
+import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
 import { ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
-import { MAX_QUERY_DEPTH_FOR_CACHE_INJECTION } from '@/object-record/cache/constants/MaxQueryDepthForCacheInjection';
 import { getRecordConnectionFromRecords } from '@/object-record/cache/utils/getRecordConnectionFromRecords';
-import { useGenerateFindManyRecordsQuery } from '@/object-record/hooks/useGenerateFindManyRecordsQuery';
+import { RecordGqlOperationVariables } from '@/object-record/graphql/types/RecordGqlOperationVariables';
 import { ObjectRecord } from '@/object-record/types/ObjectRecord';
-import { ObjectRecordQueryVariables } from '@/object-record/types/ObjectRecordQueryVariables';
+import { generateFindManyRecordsQuery } from '@/object-record/utils/generateFindManyRecordsQuery';
 
 export const useUpsertFindManyRecordsQueryInCache = ({
   objectMetadataItem,
@@ -15,25 +15,34 @@ export const useUpsertFindManyRecordsQueryInCache = ({
 }) => {
   const apolloClient = useApolloClient();
 
-  const generateFindManyRecordsQuery = useGenerateFindManyRecordsQuery();
+  const objectMetadataItems = useRecoilValue(objectMetadataItemsState);
 
   const upsertFindManyRecordsQueryInCache = <
     T extends ObjectRecord = ObjectRecord,
   >({
     queryVariables,
     objectRecordsToOverwrite,
+    recordGqlFields,
+    computeReferences = false,
   }: {
-    queryVariables: ObjectRecordQueryVariables;
+    queryVariables: RecordGqlOperationVariables;
     objectRecordsToOverwrite: T[];
+    recordGqlFields?: Record<string, any>;
+    computeReferences?: boolean;
   }) => {
     const findManyRecordsQueryForCacheOverwrite = generateFindManyRecordsQuery({
       objectMetadataItem,
-      depth: MAX_QUERY_DEPTH_FOR_CACHE_INJECTION,
+      objectMetadataItems,
+      recordGqlFields,
+      computeReferences,
     });
 
     const newObjectRecordConnection = getRecordConnectionFromRecords({
-      objectNameSingular: CoreObjectNameSingular.ActivityTarget,
+      objectMetadataItems: objectMetadataItems,
+      objectMetadataItem: objectMetadataItem,
       records: objectRecordsToOverwrite,
+      recordGqlFields,
+      computeReferences,
     });
 
     apolloClient.writeQuery({

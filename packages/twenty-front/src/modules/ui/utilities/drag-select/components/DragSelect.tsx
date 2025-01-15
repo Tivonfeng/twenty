@@ -1,27 +1,30 @@
-import { RefObject } from 'react';
 import {
   boxesIntersect,
   useSelectionContainer,
 } from '@air/react-drag-to-select';
 import { useTheme } from '@emotion/react';
-
-import { rgba } from '@/ui/theme/constants/colors';
+import { RefObject } from 'react';
+import { RGBA } from 'twenty-ui';
 
 import { useDragSelect } from '../hooks/useDragSelect';
 
 type DragSelectProps = {
   dragSelectable: RefObject<HTMLElement>;
   onDragSelectionChange: (id: string, selected: boolean) => void;
-  onDragSelectionStart?: () => void;
+  onDragSelectionStart?: (event: MouseEvent) => void;
+  onDragSelectionEnd?: (event: MouseEvent) => void;
 };
 
 export const DragSelect = ({
   dragSelectable,
   onDragSelectionChange,
   onDragSelectionStart,
+  onDragSelectionEnd,
 }: DragSelectProps) => {
   const theme = useTheme();
+
   const { isDragSelectionStartEnabled } = useDragSelect();
+
   const { DragSelection } = useSelectionContainer({
     shouldStartSelecting: (target) => {
       if (!isDragSelectionStartEnabled()) {
@@ -38,6 +41,7 @@ export const DragSelect = ({
       return true;
     },
     onSelectionStart: onDragSelectionStart,
+    onSelectionEnd: onDragSelectionEnd,
     onSelectionChange: (box) => {
       const scrollAwareBox = {
         ...box,
@@ -61,7 +65,7 @@ export const DragSelect = ({
     selectionProps: {
       style: {
         border: `1px solid ${theme.color.blue10}`,
-        background: rgba(theme.color.blue30, 0.4),
+        background: RGBA(theme.color.blue30, 0.4),
         position: `absolute`,
         zIndex: 99,
       },

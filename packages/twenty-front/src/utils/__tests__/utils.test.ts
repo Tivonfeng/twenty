@@ -17,33 +17,31 @@ describe('sanitizeURL', () => {
 describe('getLogoUrlFromDomainName', () => {
   test('should return the correct logo URL for a given domain', () => {
     expect(getLogoUrlFromDomainName('example.com')).toBe(
-      'https://favicon.twenty.com/example.com',
+      'https://twenty-icons.com/example.com',
     );
 
     expect(getLogoUrlFromDomainName('http://example.com/')).toBe(
-      'https://favicon.twenty.com/example.com',
+      'https://twenty-icons.com/example.com',
     );
 
     expect(getLogoUrlFromDomainName('https://www.example.com/')).toBe(
-      'https://favicon.twenty.com/example.com',
+      'https://twenty-icons.com/example.com',
     );
 
     expect(getLogoUrlFromDomainName('www.example.com')).toBe(
-      'https://favicon.twenty.com/example.com',
+      'https://twenty-icons.com/example.com',
     );
 
     expect(getLogoUrlFromDomainName('example.com/')).toBe(
-      'https://favicon.twenty.com/example.com',
+      'https://twenty-icons.com/example.com',
     );
 
     expect(getLogoUrlFromDomainName('apple.com')).toBe(
-      'https://favicon.twenty.com/apple.com',
+      'https://twenty-icons.com/apple.com',
     );
   });
 
   test('should handle undefined input', () => {
-    expect(getLogoUrlFromDomainName(undefined)).toBe(
-      'https://favicon.twenty.com/',
-    );
+    expect(getLogoUrlFromDomainName(undefined)).toBe(undefined);
   });
 });

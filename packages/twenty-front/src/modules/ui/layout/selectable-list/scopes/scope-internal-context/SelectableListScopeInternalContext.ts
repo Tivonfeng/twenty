@@ -1,7 +1,7 @@
-import { StateScopeMapKey } from '@/ui/utilities/recoil-scope/scopes-internal/types/StateScopeMapKey';
 import { createScopeInternalContext } from '@/ui/utilities/recoil-scope/scopes-internal/utils/createScopeInternalContext';
+import { RecoilComponentStateKey } from '@/ui/utilities/state/component-state/types/RecoilComponentStateKey';
 
-type SelectableListScopeInternalContextProps = StateScopeMapKey;
+type SelectableListScopeInternalContextProps = RecoilComponentStateKey;
 
 export const SelectableListScopeInternalContext =
   createScopeInternalContext<SelectableListScopeInternalContextProps>();

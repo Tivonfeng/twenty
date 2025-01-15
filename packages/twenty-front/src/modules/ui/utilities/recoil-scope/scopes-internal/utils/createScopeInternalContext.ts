@@ -1,10 +1,10 @@
+import { RecoilComponentStateKey } from '@/ui/utilities/state/component-state/types/RecoilComponentStateKey';
 import { Context, createContext } from 'react';
 
-import { StateScopeMapKey } from '@/ui/utilities/recoil-scope/scopes-internal/types/StateScopeMapKey';
+type ScopeInternalContext<T extends RecoilComponentStateKey> =
+  Context<T | null>;
 
-type ScopeInternalContext<T extends StateScopeMapKey> = Context<T | null>;
-
-export const createScopeInternalContext = <T extends StateScopeMapKey>(
+export const createScopeInternalContext = <T extends RecoilComponentStateKey>(
   initialValue?: T,
 ) => {
   return createContext<T | null>(

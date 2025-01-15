@@ -1,74 +1,10 @@
+import { PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS } from '@/object-record/hooks/__mocks__/personFragments';
 import { gql } from '@apollo/client';
 
 export const query = gql`
   mutation CreateOnePerson($input: PersonCreateInput!) {
     createPerson(data: $input) {
-      id
-      opportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      xLink {
-        label
-        url
-      }
-      id
-      pointOfContactForOpportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      createdAt
-      company {
-        __typename
-        id
-      }
-      city
-      email
-      activityTargets {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      jobTitle
-      favorites {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      attachments {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      name {
-        firstName
-        lastName
-      }
-      phone
-      linkedinLink {
-        label
-        url
-      }
-      updatedAt
-      avatarUrl
-      companyId
+      ${PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS}
     }
   }
 `;
@@ -78,8 +14,9 @@ export const responseData = {
     edges: [],
   },
   xLink: {
-    label: '',
-    url: '',
+    primaryLinkUrl: '',
+    primaryLinkLabel: '',
+    secondaryLinks: [],
   },
   pointOfContactForOpportunities: {
     edges: [],
@@ -104,10 +41,15 @@ export const responseData = {
     firstName: '',
     lastName: '',
   },
-  phone: '',
+  phones: {
+    primaryPhoneCountryCode: '',
+    primaryPhoneCallingCode: '',
+    primaryPhoneNumber: '',
+  },
   linkedinLink: {
-    label: '',
-    url: '',
+    primaryLinkUrl: '',
+    primaryLinkLabel: '',
+    secondaryLinks: [],
   },
   updatedAt: '',
   avatarUrl: '',

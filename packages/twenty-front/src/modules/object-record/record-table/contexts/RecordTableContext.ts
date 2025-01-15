@@ -1,12 +1,15 @@
-import { createContext } from 'react';
-
 import { ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
+import { FieldMetadata } from '@/object-record/record-field/types/FieldMetadata';
+import { ColumnDefinition } from '@/object-record/record-table/types/ColumnDefinition';
+import { createRequiredContext } from '~/utils/createRequiredContext';
 
-type RecordTableContextProps = {
+export type RecordTableContextValue = {
+  recordTableId: string;
+  viewBarId: string;
+  objectNameSingular: string;
   objectMetadataItem: ObjectMetadataItem;
-  recordTableRef: React.RefObject<HTMLDivElement>;
+  visibleTableColumns: ColumnDefinition<FieldMetadata>[];
 };
 
-export const RecordTableContext = createContext<RecordTableContextProps>(
-  {} as RecordTableContextProps,
-);
+export const [RecordTableContextProvider, useRecordTableContextOrThrow] =
+  createRequiredContext<RecordTableContextValue>('RecordTableContext');

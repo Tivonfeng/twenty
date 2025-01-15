@@ -1,14 +1,11 @@
-import React from 'react';
 import { useTheme } from '@emotion/react';
 import styled from '@emotion/styled';
-
-import {
-  IconFileUpload,
-  IconTrash,
-  IconUpload,
-  IconX,
-} from '@/ui/display/icon';
-import { Button } from '@/ui/input/button/components/Button';
+import { isNonEmptyString } from '@sniptt/guards';
+import React from 'react';
+import { getImageAbsoluteURI } from 'twenty-shared';
+import { Button, IconPhotoUp, IconTrash, IconUpload, IconX } from 'twenty-ui';
+import { REACT_APP_SERVER_BASE_URL } from '~/config';
+import { isDefined } from '~/utils/isDefined';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -18,8 +15,8 @@ const StyledContainer = styled.div`
 const StyledPicture = styled.button<{ withPicture: boolean }>`
   align-items: center;
   background: ${({ theme, disabled }) =>
-    disabled ? theme.background.secondary : theme.background.tertiary};
-  border: none;
+    disabled ? theme.background.secondary : theme.background.transparent.light};
+  border: 1px solid ${({ theme }) => theme.border.color.medium};
   border-radius: ${({ theme }) => theme.border.radius.sm};
   color: ${({ theme }) => theme.font.color.light};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
@@ -38,14 +35,18 @@ const StyledPicture = styled.button<{ withPicture: boolean }>`
     width: 100%;
   }
 
+  &:hover svg {
+    color: ${({ theme }) => theme.font.color.tertiary};
+  }
+
   ${({ theme, withPicture, disabled }) => {
-    if (withPicture || disabled) {
+    if ((withPicture || disabled) === true) {
       return '';
     }
 
     return `
       &:hover {
-        background: ${theme.background.quaternary};
+        background: ${theme.background.transparent.medium};
       }
     `;
   }};
@@ -55,16 +56,17 @@ const StyledContent = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
   margin-left: ${({ theme }) => theme.spacing(4)};
+
+  gap: ${({ theme }) => theme.spacing(3)};
 `;
 
 const StyledButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  > * + * {
-    margin-left: ${({ theme }) => theme.spacing(2)};
-  }
+
+  gap: ${({ theme }) => theme.spacing(2)};
 `;
 
 const StyledText = styled.span`
@@ -109,20 +111,27 @@ export const ImageInput = ({
     hiddenFileInput.current?.click();
   };
 
+  const pictureURI = isNonEmptyString(picture)
+    ? getImageAbsoluteURI({
+        imageUrl: picture,
+        baseUrl: REACT_APP_SERVER_BASE_URL,
+      })
+    : null;
+
   return (
     <StyledContainer className={className}>
       <StyledPicture
-        withPicture={!!picture}
+        withPicture={!!pictureURI}
         disabled={disabled}
         onClick={onUploadButtonClick}
       >
-        {picture ? (
+        {pictureURI ? (
           <img
-            src={picture || '/images/default-profile-picture.png'}
+            src={pictureURI || '/images/default-profile-picture.png'}
             alt="profile"
           />
         ) : (
-          <IconFileUpload size={theme.icon.size.md} />
+          <IconPhotoUp size={theme.icon.size.lg} />
         )}
       </StyledPicture>
       <StyledContent>
@@ -132,10 +141,8 @@ export const ImageInput = ({
             ref={hiddenFileInput}
             accept="image/jpeg, image/png, image/gif" // to desired specification
             onChange={(event) => {
-              if (onUpload) {
-                if (event.target.files) {
-                  onUpload(event.target.files[0]);
-                }
+              if (isDefined(onUpload) && isDefined(event.target.files)) {
+                onUpload(event.target.files[0]);
               }
             }}
           />
@@ -145,8 +152,7 @@ export const ImageInput = ({
               onClick={onAbort}
               variant="secondary"
               title="Abort"
-              disabled={!picture || disabled}
-              fullWidth
+              disabled={!pictureURI || disabled}
             />
           ) : (
             <Button
@@ -155,7 +161,6 @@ export const ImageInput = ({
               variant="secondary"
               title="Upload"
               disabled={disabled}
-              fullWidth
             />
           )}
           <Button
@@ -163,12 +168,11 @@ export const ImageInput = ({
             onClick={onRemove}
             variant="secondary"
             title="Remove"
-            disabled={!picture || disabled}
-            fullWidth
+            disabled={!pictureURI || disabled}
           />
         </StyledButtonContainer>
         <StyledText>
-          We support your best PNGs, JPEGs and GIFs portraits under 10MB
+          We support your square PNGs, JPEGs and GIFs under 10MB
         </StyledText>
         {errorMessage && <StyledErrorText>{errorMessage}</StyledErrorText>}
       </StyledContent>

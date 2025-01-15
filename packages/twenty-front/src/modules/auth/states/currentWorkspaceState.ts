@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { createState } from '@ui/utilities/state/utils/createState';
 
 import { Workspace } from '~/generated/graphql';
 
@@ -10,10 +10,19 @@ export type CurrentWorkspace = Pick<
   | 'displayName'
   | 'allowImpersonation'
   | 'featureFlags'
-  | 'subscriptionStatus'
+  | 'activationStatus'
+  | 'currentBillingSubscription'
+  | 'workspaceMembersCount'
+  | 'isPublicInviteLinkEnabled'
+  | 'isGoogleAuthEnabled'
+  | 'isMicrosoftAuthEnabled'
+  | 'isPasswordAuthEnabled'
+  | 'hasValidEntrepriseKey'
+  | 'subdomain'
+  | 'metadataVersion'
 >;
 
-export const currentWorkspaceState = atom<CurrentWorkspace | null>({
+export const currentWorkspaceState = createState<CurrentWorkspace | null>({
   key: 'currentWorkspaceState',
-  default: null,
+  defaultValue: null,
 });

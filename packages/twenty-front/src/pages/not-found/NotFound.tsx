@@ -1,16 +1,17 @@
-import { useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
-
 import { SignInBackgroundMockPage } from '@/sign-in-background-mock/components/SignInBackgroundMockPage';
 import { AppPath } from '@/types/AppPath';
-import { MainButton } from '@/ui/input/button/components/MainButton';
-import AnimatedPlaceholder from '@/ui/layout/animated-placeholder/components/AnimatedPlaceholder';
-import { AnimatedPlaceholderEmptyTextContainer } from '@/ui/layout/animated-placeholder/components/EmptyPlaceholderStyled';
+
+import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
+import styled from '@emotion/styled';
 import {
+  AnimatedPlaceholder,
+  AnimatedPlaceholderEmptyTextContainer,
   AnimatedPlaceholderErrorContainer,
   AnimatedPlaceholderErrorSubTitle,
   AnimatedPlaceholderErrorTitle,
-} from '@/ui/layout/animated-placeholder/components/ErrorPlaceholderStyled';
+  MainButton,
+  UndecoratedLink,
+} from 'twenty-ui';
 
 const StyledBackDrop = styled.div`
   align-items: center;
@@ -32,10 +33,9 @@ const StyledButtonContainer = styled.div`
 `;
 
 export const NotFound = () => {
-  const navigate = useNavigate();
-
   return (
     <>
+      <PageTitle title="Page Not Found | Twenty" />
       <StyledBackDrop>
         <AnimatedPlaceholderErrorContainer>
           <AnimatedPlaceholder type="error404" />
@@ -49,11 +49,9 @@ export const NotFound = () => {
             </AnimatedPlaceholderErrorSubTitle>
           </AnimatedPlaceholderEmptyTextContainer>
           <StyledButtonContainer>
-            <MainButton
-              title="Back to content"
-              fullWidth
-              onClick={() => navigate(AppPath.Index)}
-            />
+            <UndecoratedLink to={AppPath.Index}>
+              <MainButton title="Back to content" fullWidth />
+            </UndecoratedLink>
           </StyledButtonContainer>
         </AnimatedPlaceholderErrorContainer>
       </StyledBackDrop>

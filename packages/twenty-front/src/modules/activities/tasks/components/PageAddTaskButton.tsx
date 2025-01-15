@@ -1,28 +1,17 @@
-import { isNonEmptyString } from '@sniptt/guards';
-
 import { useOpenCreateActivityDrawer } from '@/activities/hooks/useOpenCreateActivityDrawer';
-import { useFilterDropdown } from '@/object-record/object-filter-dropdown/hooks/useFilterDropdown';
-import { PageAddButton } from '@/ui/layout/page/PageAddButton';
+import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
+import { PageAddButton } from '@/ui/layout/page/components/PageAddButton';
 
-type PageAddTaskButtonProps = {
-  filterDropdownId: string;
-};
-
-export const PageAddTaskButton = ({
-  filterDropdownId,
-}: PageAddTaskButtonProps) => {
-  const { selectedFilter } = useFilterDropdown({
-    filterDropdownId: filterDropdownId,
+export const PageAddTaskButton = () => {
+  const openCreateActivity = useOpenCreateActivityDrawer({
+    activityObjectNameSingular: CoreObjectNameSingular.Task,
   });
 
-  const openCreateActivity = useOpenCreateActivityDrawer();
+  // TODO: fetch workspace member from filter here
 
   const handleClick = () => {
     openCreateActivity({
-      type: 'Task',
-      assigneeId: isNonEmptyString(selectedFilter?.value)
-        ? selectedFilter?.value
-        : undefined,
+      targetableObjects: [],
     });
   };
 

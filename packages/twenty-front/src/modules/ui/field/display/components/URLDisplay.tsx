@@ -1,12 +1,9 @@
-import { MouseEvent } from 'react';
 import styled from '@emotion/styled';
+import { MouseEvent } from 'react';
 
-import { RoundedLink } from '@/ui/navigation/link/components/RoundedLink';
-import {
-  LinkType,
-  SocialLink,
-} from '@/ui/navigation/link/components/SocialLink';
+import { checkUrlType } from '~/utils/checkUrlType';
 
+import { LinkType, RoundedLink, SocialLink } from 'twenty-ui';
 import { EllipsisDisplay } from './EllipsisDisplay';
 
 const StyledRawLink = styled(RoundedLink)`
@@ -21,21 +18,6 @@ const StyledRawLink = styled(RoundedLink)`
 
 type URLDisplayProps = {
   value: string | null;
-};
-
-const checkUrlType = (url: string) => {
-  if (
-    /^(http|https):\/\/(?:www\.)?linkedin.com(\w+:{0,1}\w*@)?(\S+)(:([0-9])+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/.test(
-      url,
-    )
-  ) {
-    return LinkType.LinkedIn;
-  }
-  if (url.match(/^((http|https):\/\/)?(?:www\.)?twitter\.com\/(\w+)?/i)) {
-    return LinkType.Twitter;
-  }
-
-  return LinkType.Url;
 };
 
 export const URLDisplay = ({ value }: URLDisplayProps) => {
@@ -56,17 +38,22 @@ export const URLDisplay = ({ value }: URLDisplayProps) => {
   if (type === LinkType.LinkedIn || type === LinkType.Twitter) {
     return (
       <EllipsisDisplay>
-        <SocialLink href={absoluteUrl} onClick={handleClick} type={type}>
-          {displayedValue}
-        </SocialLink>
+        <SocialLink
+          href={absoluteUrl}
+          onClick={handleClick}
+          type={type}
+          label={displayedValue}
+        />
       </EllipsisDisplay>
     );
   }
   return (
     <EllipsisDisplay>
-      <StyledRawLink href={absoluteUrl} onClick={handleClick}>
-        {displayedValue}
-      </StyledRawLink>
+      <StyledRawLink
+        href={absoluteUrl}
+        onClick={handleClick}
+        label={displayedValue}
+      />
     </EllipsisDisplay>
   );
 };

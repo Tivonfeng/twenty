@@ -1,42 +1,75 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { useCreateActivityInDB } from '@/activities/hooks/useCreateActivityInDB';
-import { isCreatingActivityState } from '@/activities/states/isCreatingActivityState';
-import { Activity } from '@/activities/types/Activity';
+import { useRefreshShowPageFindManyActivitiesQueries } from '@/activities/hooks/useRefreshShowPageFindManyActivitiesQueries';
+import { isActivityInCreateModeState } from '@/activities/states/isActivityInCreateModeState';
+import { isUpsertingActivityInDBState } from '@/activities/states/isCreatingActivityInDBState';
+import { objectShowPageTargetableObjectState } from '@/activities/timeline-activities/states/objectShowPageTargetableObjectIdState';
+import { Note } from '@/activities/types/Note';
+import { Task } from '@/activities/types/Task';
 import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
+import { isDefined } from '~/utils/isDefined';
 
-export const useUpsertActivity = () => {
-  const [isCreatingActivity, setIsCreatingActivity] = useRecoilState(
-    isCreatingActivityState,
-  );
+export const useUpsertActivity = ({
+  activityObjectNameSingular,
+}: {
+  activityObjectNameSingular:
+    | CoreObjectNameSingular.Task
+    | CoreObjectNameSingular.Note;
+}) => {
+  const [isActivityInCreateMode] = useRecoilState(isActivityInCreateModeState);
 
-  const { updateOneRecord: updateOneActivity } = useUpdateOneRecord<Activity>({
-    objectNameSingular: CoreObjectNameSingular.Activity,
+  const { updateOneRecord: updateOneActivity } = useUpdateOneRecord<
+    Task | Note
+  >({
+    objectNameSingular: activityObjectNameSingular,
   });
 
-  const { createActivityInDB } = useCreateActivityInDB();
+  const { createActivityInDB } = useCreateActivityInDB({
+    activityObjectNameSingular,
+  });
 
-  const upsertActivity = ({
+  const [, setIsUpsertingActivityInDB] = useRecoilState(
+    isUpsertingActivityInDBState,
+  );
+
+  const objectShowPageTargetableObject = useRecoilValue(
+    objectShowPageTargetableObjectState,
+  );
+
+  const { refreshShowPageFindManyActivitiesQueries } =
+    useRefreshShowPageFindManyActivitiesQueries({
+      activityObjectNameSingular,
+    });
+
+  const upsertActivity = async ({
     activity,
     input,
   }: {
-    activity: Activity;
-    input: Partial<Activity>;
+    activity: Task | Note;
+    input: Partial<Task | Note>;
   }) => {
-    if (isCreatingActivity) {
-      createActivityInDB({
+    setIsUpsertingActivityInDB(true);
+    if (isActivityInCreateMode) {
+      const activityToCreate: Partial<Task | Note> = {
         ...activity,
         ...input,
-      });
+      };
 
-      setIsCreatingActivity(false);
+      if (isDefined(objectShowPageTargetableObject)) {
+        refreshShowPageFindManyActivitiesQueries();
+      }
+
+      await createActivityInDB(activityToCreate);
     } else {
-      updateOneActivity?.({
+      await updateOneActivity?.({
         idToUpdate: activity.id,
         updateOneRecordInput: input,
       });
     }
+
+    setIsUpsertingActivityInDB(false);
   };
 
   return {

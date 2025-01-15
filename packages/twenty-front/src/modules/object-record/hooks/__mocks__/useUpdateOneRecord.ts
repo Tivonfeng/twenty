@@ -1,74 +1,10 @@
+import { PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS } from '@/object-record/hooks/__mocks__/personFragments';
 import { gql } from '@apollo/client';
 
 export const query = gql`
   mutation UpdateOnePerson($idToUpdate: ID!, $input: PersonUpdateInput!) {
     updatePerson(id: $idToUpdate, data: $input) {
-      id
-      opportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      xLink {
-        label
-        url
-      }
-      id
-      pointOfContactForOpportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      createdAt
-      company {
-        __typename
-        id
-      }
-      city
-      email
-      activityTargets {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      jobTitle
-      favorites {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      attachments {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      name {
-        firstName
-        lastName
-      }
-      phone
-      linkedinLink {
-        label
-        url
-      }
-      updatedAt
-      avatarUrl
-      companyId
+      ${PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS}
     }
   }
 `;
@@ -76,21 +12,21 @@ export const query = gql`
 const basePerson = {
   id: '36abbb63-34ed-4a16-89f5-f549ac55d0f9',
   xLink: {
-    label: '',
-    url: '',
+    primaryLinkUrl: '',
+    primaryLinkLabel: '',
+    secondaryLinks: [],
   },
   createdAt: '',
   city: '',
-  email: '',
   jobTitle: '',
   name: {
     firstName: '',
     lastName: '',
   },
-  phone: '',
   linkedinLink: {
-    label: '',
-    url: '',
+    primaryLinkUrl: '',
+    primaryLinkLabel: '',
+    secondaryLinks: [],
   },
   updatedAt: '',
   avatarUrl: '',
@@ -127,6 +63,6 @@ export const variables = {
 };
 
 export const responseData = {
-  ...basePerson,
+  ...{ ...basePerson, __typename: 'Person' },
   ...connectedObjects,
 };

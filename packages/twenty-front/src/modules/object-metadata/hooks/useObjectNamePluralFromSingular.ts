@@ -1,8 +1,9 @@
 import { useRecoilValue } from 'recoil';
 
-import { isCurrentWorkspaceActiveSelector } from '@/auth/states/selectors/isCurrentWorkspaceActiveSelector';
+import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { objectMetadataItemFamilySelector } from '@/object-metadata/states/objectMetadataItemFamilySelector';
-import { getObjectMetadataItemsMock } from '@/object-metadata/utils/getObjectMetadataItemsMock';
+import { WorkspaceActivationStatus } from '~/generated/graphql';
+import { generatedMockObjectMetadataItems } from '~/testing/mock-data/generatedMockObjectMetadataItems';
 import { isDefined } from '~/utils/isDefined';
 
 export const useObjectNamePluralFromSingular = ({
@@ -10,10 +11,7 @@ export const useObjectNamePluralFromSingular = ({
 }: {
   objectNameSingular: string;
 }) => {
-  const isCurrentWorkspaceActive = useRecoilValue(
-    isCurrentWorkspaceActiveSelector,
-  );
-  const mockObjectMetadataItems = getObjectMetadataItemsMock();
+  const currentWorkspace = useRecoilValue(currentWorkspaceState);
 
   let objectMetadataItem = useRecoilValue(
     objectMetadataItemFamilySelector({
@@ -22,9 +20,9 @@ export const useObjectNamePluralFromSingular = ({
     }),
   );
 
-  if (!isCurrentWorkspaceActive) {
+  if (currentWorkspace?.activationStatus !== WorkspaceActivationStatus.Active) {
     objectMetadataItem =
-      mockObjectMetadataItems.find(
+      generatedMockObjectMetadataItems.find(
         (objectMetadataItem) =>
           objectMetadataItem.nameSingular === objectNameSingular,
       ) ?? null;

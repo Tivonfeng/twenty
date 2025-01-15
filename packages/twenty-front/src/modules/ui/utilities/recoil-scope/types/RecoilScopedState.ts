@@ -1,7 +1,7 @@
 import { RecoilState } from 'recoil';
 
-import { StateScopeMapKey } from '../scopes-internal/types/StateScopeMapKey';
+import { RecoilComponentStateKey } from '@/ui/utilities/state/component-state/types/RecoilComponentStateKey';
 
 export type RecoilScopedState<StateType> = (
-  scopedKey: StateScopeMapKey,
+  scopedKey: RecoilComponentStateKey,
 ) => RecoilState<StateType>;

@@ -1,13 +1,14 @@
-import { ReactNode } from 'react';
 import { gql } from '@apollo/client';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { ReactNode } from 'react';
+import { useRecoilValue } from 'recoil';
 
 import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
+import { PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS } from '@/object-record/hooks/__mocks__/personFragments';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
 import {
-  phoneFieldDefinition,
+  phonesFieldDefinition,
   relationFieldDefinition,
 } from '@/object-record/record-field/__mocks__/fieldDefinitions';
 import {
@@ -19,15 +20,12 @@ import { usePersistField } from '@/object-record/record-field/hooks/usePersistFi
 import { FieldDefinition } from '@/object-record/record-field/types/FieldDefinition';
 import { FieldMetadata } from '@/object-record/record-field/types/FieldMetadata';
 import { recordStoreFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreFamilySelector';
-
-jest.mock('@/object-metadata/hooks/useMapFieldMetadataToGraphQLQuery', () => ({
-  useMapFieldMetadataToGraphQLQuery: () => () => '\n',
-}));
+import { getJestMetadataAndApolloMocksWrapper } from '~/testing/jest/getJestMetadataAndApolloMocksWrapper';
 
 const query = gql`
   mutation UpdateOnePerson($idToUpdate: ID!, $input: PersonUpdateInput!) {
     updatePerson(id: $idToUpdate, data: $input) {
-      id
+      ${PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS}
     }
   }
 `;
@@ -36,12 +34,22 @@ const mocks: MockedResponse[] = [
   {
     request: {
       query,
-      variables: { idToUpdate: 'entityId', input: { phone: '+1 123 456' } },
+      variables: {
+        idToUpdate: 'recordId',
+        input: {
+          phones: {
+            primaryPhoneNumber: '123 456',
+            primaryPhoneCountryCode: 'US',
+            primaryPhoneCallingCode: '+1',
+            additionalPhones: [],
+          },
+        },
+      },
     },
     result: jest.fn(() => ({
       data: {
         updatePerson: {
-          id: 'entityId',
+          id: 'recordId',
         },
       },
     })),
@@ -50,21 +58,25 @@ const mocks: MockedResponse[] = [
     request: {
       query,
       variables: {
-        idToUpdate: 'entityId',
+        idToUpdate: 'recordId',
         input: { companyId: 'companyId' },
       },
     },
     result: jest.fn(() => ({
       data: {
         updatePerson: {
-          id: 'entityId',
+          id: 'recordId',
         },
       },
     })),
   },
 ];
 
-const entityId = 'entityId';
+const recordId = 'recordId';
+
+const JestMetadataAndApolloMocksWrapper = getJestMetadataAndApolloMocksWrapper({
+  apolloMocks: mocks,
+});
 
 const getWrapper =
   (fieldDefinition: FieldDefinition<FieldMetadata>) =>
@@ -85,23 +97,23 @@ const getWrapper =
     };
 
     return (
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <JestMetadataAndApolloMocksWrapper>
         <FieldContext.Provider
           value={{
             fieldDefinition,
-            entityId,
+            recordId,
             hotkeyScope: 'hotkeyScope',
             isLabelIdentifier: false,
             useUpdateRecord: useUpdateOneRecordMutation,
           }}
         >
-          <RecoilRoot>{children}</RecoilRoot>
+          {children}
         </FieldContext.Provider>
-      </MockedProvider>
+      </JestMetadataAndApolloMocksWrapper>
     );
   };
 
-const PhoneWrapper = getWrapper(phoneFieldDefinition);
+const PhoneWrapper = getWrapper(phonesFieldDefinition);
 const RelationWrapper = getWrapper(relationFieldDefinition);
 
 describe('usePersistField', () => {
@@ -109,7 +121,7 @@ describe('usePersistField', () => {
     const { result } = renderHook(
       () => {
         const entityFields = useRecoilValue(
-          recordStoreFamilySelector({ recordId: entityId, fieldName: 'phone' }),
+          recordStoreFamilySelector({ recordId, fieldName: 'phone' }),
         );
 
         return {
@@ -121,7 +133,12 @@ describe('usePersistField', () => {
     );
 
     act(() => {
-      result.current.persistField('+1 123 456');
+      result.current.persistField({
+        primaryPhoneNumber: '123 456',
+        primaryPhoneCountryCode: 'US',
+        primaryPhoneCallingCode: '+1',
+        additionalPhones: [],
+      });
     });
 
     await waitFor(() => {
@@ -134,7 +151,7 @@ describe('usePersistField', () => {
       () => {
         const entityFields = useRecoilValue(
           recordStoreFamilySelector({
-            recordId: entityId,
+            recordId,
             fieldName: 'company',
           }),
         );

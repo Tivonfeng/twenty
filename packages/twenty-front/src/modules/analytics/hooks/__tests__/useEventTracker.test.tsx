@@ -1,34 +1,38 @@
-import { ReactNode } from 'react';
 import { gql } from '@apollo/client';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { expect } from '@storybook/test';
 import { act, renderHook, waitFor } from '@testing-library/react';
+import { ReactNode } from 'react';
 import { RecoilRoot } from 'recoil';
 
 import { useEventTracker } from '../useEventTracker';
-
-jest.mock('@/object-metadata/hooks/useMapFieldMetadataToGraphQLQuery', () => ({
-  useMapFieldMetadataToGraphQLQuery: () => () => '\n',
-}));
 
 const mocks: MockedResponse[] = [
   {
     request: {
       query: gql`
-        mutation CreateEvent($type: String!, $data: JSON!) {
-          createEvent(type: $type, data: $data) {
+        mutation Track($action: String!, $payload: JSON!) {
+          track(action: $action, payload: $payload) {
             success
           }
         }
       `,
       variables: {
-        type: 'exampleType',
-        data: { location: { pathname: '/examplePath' } },
+        action: 'exampleType',
+        payload: {
+          sessionId: 'exampleId',
+          pathname: '',
+          userAgent: '',
+          timeZone: '',
+          locale: '',
+          href: '',
+          referrer: '',
+        },
       },
     },
     result: jest.fn(() => ({
       data: {
-        createEvent: {
+        track: {
           success: true,
         },
       },
@@ -47,7 +51,15 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 describe('useEventTracker', () => {
   it('should make the call to track the event', async () => {
     const eventType = 'exampleType';
-    const eventData = { location: { pathname: '/examplePath' } };
+    const eventData = {
+      sessionId: 'exampleId',
+      pathname: '',
+      userAgent: '',
+      timeZone: '',
+      locale: '',
+      href: '',
+      referrer: '',
+    };
     const { result } = renderHook(() => useEventTracker(), {
       wrapper: Wrapper,
     });

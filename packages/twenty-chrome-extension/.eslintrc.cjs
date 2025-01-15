@@ -1,18 +1,15 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+  extends: ['../../.eslintrc.cjs', '../../.eslintrc.react.cjs'],
+  ignorePatterns: ['!**/*', 'node_modules', 'dist', '**/generated/*'],
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parserOptions: {
+        project: ['packages/twenty-chrome-extension/tsconfig.{json,*.json}'],
+      },
+      rules: {
+        '@nx/workspace-explicit-boolean-predicates-in-if': 'warn',
+      },
+    },
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-  },
-}
+};

@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "target": "es2017",
     "sourceMap": true,
+    "inlineSources": true,
     "outDir": "./dist",
     "incremental": true,
     "skipLibCheck": true,
@@ -25,7 +26,13 @@
     "types": ["jest", "node"],
     "paths": {
       "src/*": ["packages/twenty-server/src/*"],
-      "twenty-emails": ["packages/twenty-emails/src/index.ts"]
+      "test/*": ["packages/twenty-server/test/*"],
+      "twenty-emails": ["packages/twenty-emails/dist"]
     }
-  }
+  },
+  "ts-node": {
+    "files": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "exclude": ["dist"]
 }
