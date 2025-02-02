@@ -1,8 +1,8 @@
-import { useFilterDropdown } from '@/object-record/object-filter-dropdown/hooks/useFilterDropdown';
+import { OBJECT_FILTER_DROPDOWN_ID } from '@/object-record/object-filter-dropdown/constants/ObjectFilterDropdownId';
+import { useResetFilterDropdown } from '@/object-record/object-filter-dropdown/hooks/useResetFilterDropdown';
 import { Dropdown } from '@/ui/layout/dropdown/components/Dropdown';
 import { HotkeyScope } from '@/ui/utilities/hotkey/types/HotkeyScope';
-
-import { ObjectFilterDropdownId } from '../constants/ObjectFilterDropdownId';
+import { useCallback } from 'react';
 
 import { MultipleFiltersButton } from './MultipleFiltersButton';
 import { MultipleFiltersDropdownContent } from './MultipleFiltersDropdownContent';
@@ -14,12 +14,16 @@ type MultipleFiltersDropdownButtonProps = {
 export const MultipleFiltersDropdownButton = ({
   hotkeyScope,
 }: MultipleFiltersDropdownButtonProps) => {
-  const { resetFilter } = useFilterDropdown();
+  const { resetFilterDropdown } = useResetFilterDropdown();
+
+  const handleDropdownClose = useCallback(() => {
+    resetFilterDropdown();
+  }, [resetFilterDropdown]);
 
   return (
     <Dropdown
-      dropdownId={ObjectFilterDropdownId}
-      onClose={resetFilter}
+      dropdownId={OBJECT_FILTER_DROPDOWN_ID}
+      onClose={handleDropdownClose}
       clickableComponent={<MultipleFiltersButton />}
       dropdownComponents={<MultipleFiltersDropdownContent />}
       dropdownHotkeyScope={hotkeyScope}

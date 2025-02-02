@@ -1,76 +1,12 @@
 import { gql } from '@apollo/client';
 
+import { PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS } from '@/object-record/hooks/__mocks__/personFragments';
 import { responseData as person } from './useUpdateOneRecord';
 
 export const query = gql`
-  query FindOneperson($objectRecordId: UUID!) {
+  query FindOnePerson($objectRecordId: ID!) {
     person(filter: { id: { eq: $objectRecordId } }) {
-      id
-      opportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      xLink {
-        label
-        url
-      }
-      id
-      pointOfContactForOpportunities {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      createdAt
-      company {
-        __typename
-        id
-      }
-      city
-      email
-      activityTargets {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      jobTitle
-      favorites {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      attachments {
-        edges {
-          node {
-            __typename
-            id
-          }
-        }
-      }
-      name {
-        firstName
-        lastName
-      }
-      phone
-      linkedinLink {
-        label
-        url
-      }
-      updatedAt
-      avatarUrl
-      companyId
+      ${PERSON_FRAGMENT_WITH_DEPTH_ONE_RELATIONS}
     }
   }
 `;

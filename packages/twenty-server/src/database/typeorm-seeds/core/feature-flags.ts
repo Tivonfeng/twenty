@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 
-import { FeatureFlagKeys } from 'src/core/feature-flag/feature-flag.entity';
+import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
 
 const tableName = 'featureFlag';
 
@@ -16,19 +16,79 @@ export const seedFeatureFlags = async (
     .orIgnore()
     .values([
       {
-        key: FeatureFlagKeys.IsMessagingEnabled,
+        key: FeatureFlagKey.IsAirtableIntegrationEnabled,
         workspaceId: workspaceId,
         value: true,
       },
       {
-        key: FeatureFlagKeys.IsWorkspaceCleanable,
+        key: FeatureFlagKey.IsPostgreSQLIntegrationEnabled,
         workspaceId: workspaceId,
         value: true,
       },
       {
-        key: FeatureFlagKeys.IsNewRecordBoardEnabled,
+        key: FeatureFlagKey.IsEventObjectEnabled,
+        workspaceId: workspaceId,
+        value: false,
+      },
+      {
+        key: FeatureFlagKey.IsStripeIntegrationEnabled,
         workspaceId: workspaceId,
         value: true,
+      },
+      {
+        key: FeatureFlagKey.IsWorkflowEnabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsAnalyticsV2Enabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsCustomDomainEnabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsBillingPlansEnabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsUniqueIndexesEnabled,
+        workspaceId: workspaceId,
+        value: false,
+      },
+      {
+        key: FeatureFlagKey.IsMicrosoftSyncEnabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsAdvancedFiltersEnabled,
+        workspaceId: workspaceId,
+        value: false,
+      },
+      {
+        key: FeatureFlagKey.IsCommandMenuV2Enabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsLocalizationEnabled,
+        workspaceId: workspaceId,
+        value: true,
+      },
+      {
+        key: FeatureFlagKey.IsRichTextV2Enabled,
+        workspaceId: workspaceId,
+        value: false,
+      },
+      {
+        key: FeatureFlagKey.IsNewRelationEnabled,
+        workspaceId: workspaceId,
+        value: false,
       },
     ])
     .execute();

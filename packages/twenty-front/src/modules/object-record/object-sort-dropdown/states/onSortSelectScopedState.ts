@@ -1,10 +1,11 @@
-import { createStateScopeMap } from '@/ui/utilities/recoil-scope/utils/createStateScopeMap';
-
+import { ObjectSortDropdownComponentInstanceContext } from '@/object-record/object-sort-dropdown/states/context/ObjectSortDropdownComponentInstanceContext';
+import { createComponentStateV2 } from '@/ui/utilities/state/component-state/utils/createComponentStateV2';
 import { Sort } from '../types/Sort';
 
-export const onSortSelectScopedState = createStateScopeMap<
+export const onSortSelectComponentState = createComponentStateV2<
   ((sort: Sort) => void) | undefined
 >({
-  key: 'onSortSelectScopedState',
+  key: 'onSortSelectComponentState',
   defaultValue: undefined,
+  componentInstanceContext: ObjectSortDropdownComponentInstanceContext,
 });

@@ -1,119 +1,133 @@
-import handleQueryParams from '../utils/handleQueryParams';
-import requestDb from '../utils/requestDb';
-import createNewButton from './createButton';
-import extractFirstAndLastName from './utils/extractFirstAndLastName';
+import { isDefined } from 'twenty-shared';
+import { createDefaultButton } from '~/contentScript/createButton';
+import changeSidePanelUrl from '~/contentScript/utils/changeSidepanelUrl';
+import extractFirstAndLastName from '~/contentScript/utils/extractFirstAndLastName';
+import { createPerson, fetchPerson } from '~/db/person.db';
+import { PersonInput } from '~/db/types/person.types';
 
-function insertButtonForPerson(): void {
-  // Select the element in which to create the button.
-  const parentDiv: HTMLDivElement | null = document.querySelector(
-    '.pv-top-card-v2-ctas',
+export const checkIfPersonExists = async () => {
+  const { tab: activeTab } = await chrome.runtime.sendMessage({
+    action: 'getActiveTab',
+  });
+
+  let activeTabUrl = '';
+  if (isDefined(activeTab.url.endsWith('/'))) {
+    activeTabUrl = activeTab.url.slice(0, -1);
+  }
+
+  const personNameElement = document.querySelector('.text-heading-xlarge');
+  const personName = personNameElement ? personNameElement.textContent : '';
+
+  const { firstName, lastName } = extractFirstAndLastName(String(personName));
+  const person = await fetchPerson({
+    name: {
+      firstName: { eq: firstName },
+      lastName: { eq: lastName },
+    },
+    linkedinLink: { url: { eq: activeTabUrl }, label: { eq: activeTabUrl } },
+  });
+  return person;
+};
+
+export const addPerson = async () => {
+  const personNameElement = document.querySelector('.text-heading-xlarge');
+
+  const separatorElement = document.querySelector(
+    '.pv-text-details__separator',
+  );
+  const personCityElement = separatorElement?.previousElementSibling;
+
+  const profilePictureElement = document.querySelector(
+    '.pv-top-card-profile-picture__image',
   );
 
-  // Create the button with desired callback funciton to execute upon click.
-  if (parentDiv) {
-    const newButtonPerson: HTMLButtonElement = createNewButton(
-      'Add to Twenty',
-      async () => {
-        // Extract person-specific data from the DOM.
-        const personNameElement = document.querySelector(
-          '.text-heading-xlarge',
-        );
+  const firstListItem = document.querySelector(
+    'div[data-view-name="profile-component-entity"]',
+  );
+  const secondDivElement = firstListItem?.querySelector('div:nth-child(2)');
+  const ariaHiddenSpan = secondDivElement?.querySelector(
+    'span[aria-hidden="true"]',
+  );
 
-        const separatorElement = document.querySelector(
-          '.pv-text-details__separator',
-        );
-        const personCityElement = separatorElement?.previousElementSibling;
+  // Get the text content or other necessary data from the DOM elements.
+  const personName = personNameElement ? personNameElement.textContent : '';
+  const personCity = personCityElement
+    ? personCityElement.textContent?.trim().replace(/\s+/g, ' ').split(',')[0]
+    : '';
+  const profilePicture = profilePictureElement
+    ? profilePictureElement?.getAttribute('src')
+    : '';
+  const jobTitle = ariaHiddenSpan ? ariaHiddenSpan.textContent?.trim() : '';
 
-        const profilePictureElement = document.querySelector(
-          '.pv-top-card-profile-picture__image',
-        );
+  const { firstName, lastName } = extractFirstAndLastName(String(personName));
 
-        const firstListItem = document.querySelector(
-          'div[data-view-name="profile-component-entity"]',
-        );
-        const secondDivElement =
-          firstListItem?.querySelector('div:nth-child(2)');
-        const ariaHiddenSpan = secondDivElement?.querySelector(
-          'span[aria-hidden="true"]',
-        );
+  // Prepare person data to send to the backend.
+  const personData: PersonInput = {
+    name: { firstName, lastName },
+    city: personCity ?? '',
+    avatarUrl: profilePicture ?? '',
+    jobTitle: jobTitle ?? '',
+    linkedinLink: { url: '', label: '' },
+  };
 
-        // Get the text content or other necessary data from the DOM elements.
-        const personName = personNameElement
-          ? personNameElement.textContent
-          : '';
-        const personCity = personCityElement
-          ? personCityElement.textContent
-              ?.trim()
-              .replace(/\s+/g, ' ')
-              .split(',')[0]
-          : '';
-        const profilePicture = profilePictureElement
-          ? profilePictureElement?.getAttribute('src')
-          : '';
-        const jobTitle = ariaHiddenSpan
-          ? ariaHiddenSpan.textContent?.trim()
-          : '';
+  // Extract active tab url using chrome API - an event is triggered here and is caught by background script.
+  const { tab: activeTab } = await chrome.runtime.sendMessage({
+    action: 'getActiveTab',
+  });
 
-        const { firstName, lastName } = extractFirstAndLastName(
-          String(personName),
-        );
+  let activeTabUrl = '';
 
-        // Prepare person data to send to the backend.
-        const personData = {
-          name: { firstName, lastName },
-          city: personCity,
-          avatarUrl: profilePicture,
-          jobTitle,
-          linkedinLink: { url: '', label: '' },
-        };
+  // Remove last slash from the URL for consistency when saving usernames.
+  if (isDefined(activeTab.url.endsWith('/'))) {
+    activeTabUrl = activeTab.url.slice(0, -1);
+  }
 
-        // Extract active tab url using chrome API - an event is triggered here and is caught by background script.
-        let { url: activeTabUrl } = await chrome.runtime.sendMessage({
-          action: 'getActiveTabUrl',
-        });
+  personData.linkedinLink = { url: activeTabUrl, label: activeTabUrl };
+  const personId = await createPerson(personData);
 
-        // Remove last slash from the URL for consistency when saving usernames.
-        if (activeTabUrl.endsWith('/')) {
-          activeTabUrl = activeTabUrl.slice(0, -1);
-        }
+  if (isDefined(personId)) {
+    await changeSidePanelUrl(`/object/person/${personId}`);
+  }
 
-        personData.linkedinLink = { url: activeTabUrl, label: activeTabUrl };
+  return personId;
+};
 
-        const query = `mutation CreateOnePerson { createPerson(data:{${handleQueryParams(
-          personData,
-        )}}) {id} }`;
+export const insertButtonForPerson = async () => {
+  const personButtonDiv = createDefaultButton('twenty-person-btn');
 
-        const response = await requestDb(query);
+  if (isDefined(personButtonDiv)) {
+    const addedProfileDiv = document.querySelector('.artdeco-card > .ph5');
 
-        if (response.data) {
-          newButtonPerson.textContent = 'Saved';
-          newButtonPerson.setAttribute('disabled', 'true');
+    if (isDefined(addedProfileDiv)) {
+      Object.assign(personButtonDiv.style, {
+        marginTop: '.8rem',
+      });
+      addedProfileDiv.append(personButtonDiv);
+    }
 
-          // Button specific styles once the button is unclickable after successfully sending data to server.
-          newButtonPerson.addEventListener('mouseenter', () => {
-            const hoverStyles = {
-              backgroundColor: 'black',
-              borderColor: 'black',
-              cursor: 'default',
-            };
-            Object.assign(newButtonPerson.style, hoverStyles);
-          });
-        } else {
-          newButtonPerson.textContent = 'Try Again';
-        }
-      },
-    );
+    const personButtonSpan = personButtonDiv.getElementsByTagName('span')[0];
+    const person = await checkIfPersonExists();
 
-    // Include the button in the DOM.
-    parentDiv.prepend(newButtonPerson);
-
-    // Write button specific styles here - common ones can be found in createButton.ts.
-    const buttonSpecificStyles = {
-      marginRight: '0.5em',
+    const openPersonOnSidePanel = (personId: string) => {
+      personButtonSpan.textContent = 'View in Twenty';
+      personButtonDiv.onClickHandler(async () => {
+        await changeSidePanelUrl(`/object/person/${personId}`);
+        chrome.runtime.sendMessage({ action: 'openSidepanel' });
+      });
     };
 
-    Object.assign(newButtonPerson.style, buttonSpecificStyles);
+    if (isDefined(person)) {
+      await changeSidePanelUrl(`/object/person/${person.id}`);
+      if (isDefined(person.id)) openPersonOnSidePanel(person.id);
+    } else {
+      await changeSidePanelUrl(`/objects/people`);
+      personButtonSpan.textContent = 'Add to Twenty';
+      personButtonDiv.onClickHandler(async () => {
+        personButtonSpan.textContent = 'Saving...';
+        const personId = await addPerson();
+        if (isDefined(personId)) openPersonOnSidePanel(personId);
+        else personButtonSpan.textContent = 'Try again';
+      });
+    }
   }
-}
-
-export default insertButtonForPerson;
+};

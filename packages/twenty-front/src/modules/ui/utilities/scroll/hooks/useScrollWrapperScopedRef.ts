@@ -1,11 +1,19 @@
 import { useContext } from 'react';
 
-import { ScrollWrapperContext } from '../components/ScrollWrapper';
+import { isUndefinedOrNull } from '~/utils/isUndefinedOrNull';
 
-export const useScrollWrapperScopedRef = () => {
-  const scrollWrapperRef = useContext(ScrollWrapperContext);
+import {
+  ContextProviderName,
+  getContextByProviderName,
+} from '@/ui/utilities/scroll/contexts/ScrollWrapperContexts';
 
-  if (!scrollWrapperRef)
+export const useScrollWrapperScopedRef = (
+  contextProviderName: ContextProviderName,
+) => {
+  const Context = getContextByProviderName(contextProviderName);
+  const scrollWrapperRef = useContext(Context);
+
+  if (isUndefinedOrNull(scrollWrapperRef))
     throw new Error(
       `Using a scroll ref without a ScrollWrapper : verify that you are using a ScrollWrapper if you intended to do so.`,
     );

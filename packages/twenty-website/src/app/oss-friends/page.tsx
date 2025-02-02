@@ -1,8 +1,17 @@
-import { Background } from '@/app/components/oss-friends/Background';
-import { Card, OssData } from '@/app/components/oss-friends/Card';
-import { CardContainer } from '@/app/components/oss-friends/CardContainer';
-import { ContentContainer } from '@/app/components/oss-friends/ContentContainer';
-import { Header } from '@/app/components/oss-friends/Header';
+import { Background } from '@/app/_components/oss-friends/Background';
+import { Card, OssData } from '@/app/_components/oss-friends/Card';
+import { CardContainer } from '@/app/_components/oss-friends/CardContainer';
+import { ContentContainer } from '@/app/_components/oss-friends/ContentContainer';
+import { Header } from '@/app/_components/oss-friends/Header';
+
+export const metadata = {
+  title: 'Twenty - OSS friends',
+  description:
+    'At Twenty, we are proud to be part of a global open-source movement. Here are some of our fellow open source friends.',
+  icons: '/images/core/logo.svg',
+};
+
+export const dynamic = 'force-dynamic';
 
 export default async function OssFriends() {
   const ossList = await fetch('https://formbricks.com/api/oss-friends');
@@ -10,8 +19,7 @@ export default async function OssFriends() {
   const listJson = await ossList.json();
 
   return (
-    <>
-      <Background />
+    <Background>
       <ContentContainer>
         <Header />
         <CardContainer>
@@ -20,6 +28,6 @@ export default async function OssFriends() {
           ))}
         </CardContainer>
       </ContentContainer>
-    </>
+    </Background>
   );
 }

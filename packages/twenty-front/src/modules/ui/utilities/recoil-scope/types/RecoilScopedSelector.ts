@@ -1,7 +1,7 @@
 import { RecoilValueReadOnly } from 'recoil';
 
-import { StateScopeMapKey } from '../scopes-internal/types/StateScopeMapKey';
+import { RecoilComponentStateKey } from '@/ui/utilities/state/component-state/types/RecoilComponentStateKey';
 
 export type RecoilScopedSelector<StateType> = (
-  scopedKey: StateScopeMapKey,
+  scopedKey: RecoilComponentStateKey,
 ) => RecoilValueReadOnly<StateType>;

@@ -1,17 +1,9 @@
 import { DataSource } from 'typeorm';
 
-import {
-  seedUsers,
-  deleteUsersByWorkspace,
-} from 'src/database/typeorm-seeds/core/users';
-import {
-  seedWorkspaces,
-  deleteWorkspaces,
-} from 'src/database/typeorm-seeds/core/workspaces';
-import {
-  seedFeatureFlags,
-  deleteFeatureFlags,
-} from 'src/database/typeorm-seeds/core/feature-flags';
+import { seedUsers } from 'src/database/typeorm-seeds/core/users';
+import { seedWorkspaces } from 'src/database/typeorm-seeds/core/workspaces';
+import { seedFeatureFlags } from 'src/database/typeorm-seeds/core/feature-flags';
+import { seedUserWorkspaces } from 'src/database/typeorm-seeds/core/userWorkspaces';
 
 export const seedCoreSchema = async (
   workspaceDataSource: DataSource,
@@ -20,18 +12,7 @@ export const seedCoreSchema = async (
   const schemaName = 'core';
 
   await seedWorkspaces(workspaceDataSource, schemaName, workspaceId);
-  await seedUsers(workspaceDataSource, schemaName, workspaceId);
+  await seedUsers(workspaceDataSource, schemaName);
+  await seedUserWorkspaces(workspaceDataSource, schemaName, workspaceId);
   await seedFeatureFlags(workspaceDataSource, schemaName, workspaceId);
-};
-
-export const deleteCoreSchema = async (
-  workspaceDataSource: DataSource,
-  workspaceId: string,
-) => {
-  const schemaName = 'core';
-
-  await deleteUsersByWorkspace(workspaceDataSource, schemaName, workspaceId);
-  await deleteFeatureFlags(workspaceDataSource, schemaName, workspaceId);
-  // deleteWorkspaces should be last
-  await deleteWorkspaces(workspaceDataSource, schemaName, workspaceId);
 };

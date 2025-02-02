@@ -1,4 +1,8 @@
 import {
+  RULE_NAME as injectWorkspaceRepositoryName,
+  rule as injectWorkspaceRepository,
+} from './rules/inject-workspace-repository';
+import {
   rule as componentPropsNaming,
   RULE_NAME as componentPropsNamingName,
 } from './rules/component-props-naming';
@@ -7,13 +11,25 @@ import {
   RULE_NAME as effectComponentsName,
 } from './rules/effect-components';
 import {
+  rule as explicitBooleanPredicatesInIf,
+  RULE_NAME as explicitBooleanPredicatesInIfName,
+} from './rules/explicit-boolean-predicates-in-if';
+import {
   rule as matchingStateVariable,
   RULE_NAME as matchingStateVariableName,
 } from './rules/matching-state-variable';
 import {
+  rule as maxConstsPerFile,
+  RULE_NAME as maxConstsPerFileName,
+} from './rules/max-consts-per-file';
+import {
   rule as noHardcodedColors,
   RULE_NAME as noHardcodedColorsName,
 } from './rules/no-hardcoded-colors';
+import {
+  rule as noNavigatePreferLink,
+  RULE_NAME as noNavigatePreferLinkName,
+} from './rules/no-navigate-prefer-link';
 import {
   rule as noStateUseref,
   RULE_NAME as noStateUserefName,
@@ -26,6 +42,15 @@ import {
   rule as styledComponentsPrefixedWithStyled,
   RULE_NAME as styledComponentsPrefixedWithStyledName,
 } from './rules/styled-components-prefixed-with-styled';
+import {
+  rule as useGetLoadableAndGetValueToGetAtoms,
+  RULE_NAME as useGetLoadableAndGetValueToGetAtomsName,
+} from './rules/use-getLoadable-and-getValue-to-get-atoms';
+import {
+  rule as useRecoilCallbackHasDependencyArray,
+  RULE_NAME as useRecoilCallbackHasDependencyArrayName,
+} from './rules/useRecoilCallback-has-dependency-array';
+
 /**
  * Import your custom workspace rules at the top of this file.
  *
@@ -60,5 +85,13 @@ module.exports = {
     [sortCssPropertiesAlphabeticallyName]: sortCssPropertiesAlphabetically,
     [styledComponentsPrefixedWithStyledName]:
       styledComponentsPrefixedWithStyled,
+    [explicitBooleanPredicatesInIfName]: explicitBooleanPredicatesInIf,
+    [useGetLoadableAndGetValueToGetAtomsName]:
+      useGetLoadableAndGetValueToGetAtoms,
+    [maxConstsPerFileName]: maxConstsPerFile,
+    [useRecoilCallbackHasDependencyArrayName]:
+      useRecoilCallbackHasDependencyArray,
+    [noNavigatePreferLinkName]: noNavigatePreferLink,
+    [injectWorkspaceRepositoryName]: injectWorkspaceRepository,
   },
 };

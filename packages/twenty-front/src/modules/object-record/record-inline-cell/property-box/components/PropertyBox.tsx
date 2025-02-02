@@ -1,21 +1,22 @@
 import styled from '@emotion/styled';
 
-const StyledPropertyBoxContainer = styled.div`
+interface PropertyBoxProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const StyledPropertyBoxContainer = styled.div`
   align-self: stretch;
-  background: ${({ theme }) => theme.background.secondary};
-  border: 1px solid ${({ theme }) => theme.border.color.medium};
   border-radius: ${({ theme }) => theme.border.radius.sm};
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing(2)};
   padding: ${({ theme }) => theme.spacing(3)};
+  padding-right: ${({ theme }) => theme.spacing(2)};
 `;
 
-interface PropertyBoxProps {
-  children: React.ReactNode;
-  extraPadding?: boolean;
-}
-
-export const PropertyBox = ({ children }: PropertyBoxProps) => (
-  <StyledPropertyBoxContainer>{children}</StyledPropertyBoxContainer>
+export const PropertyBox = ({ children, className }: PropertyBoxProps) => (
+  <StyledPropertyBoxContainer className={className}>
+    {children}
+  </StyledPropertyBoxContainer>
 );

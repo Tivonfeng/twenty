@@ -2,13 +2,24 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 
 import { DataSource } from 'typeorm';
 
-import { EnvironmentService } from 'src/integrations/environment/environment.service';
-import { DataSourceEntity } from 'src/metadata/data-source/data-source.entity';
-import { User } from 'src/core/user/user.entity';
-import { Workspace } from 'src/core/workspace/workspace.entity';
-import { RefreshToken } from 'src/core/refresh-token/refresh-token.entity';
-import { FeatureFlagEntity } from 'src/core/feature-flag/feature-flag.entity';
-
+import { AppToken } from 'src/engine/core-modules/app-token/app-token.entity';
+import { BillingCustomer } from 'src/engine/core-modules/billing/entities/billing-customer.entity';
+import { BillingEntitlement } from 'src/engine/core-modules/billing/entities/billing-entitlement.entity';
+import { BillingMeter } from 'src/engine/core-modules/billing/entities/billing-meter.entity';
+import { BillingPrice } from 'src/engine/core-modules/billing/entities/billing-price.entity';
+import { BillingProduct } from 'src/engine/core-modules/billing/entities/billing-product.entity';
+import { BillingSubscriptionItem } from 'src/engine/core-modules/billing/entities/billing-subscription-item.entity';
+import { BillingSubscription } from 'src/engine/core-modules/billing/entities/billing-subscription.entity';
+import { EnvironmentService } from 'src/engine/core-modules/environment/environment.service';
+import { FeatureFlag } from 'src/engine/core-modules/feature-flag/feature-flag.entity';
+import { KeyValuePair } from 'src/engine/core-modules/key-value-pair/key-value-pair.entity';
+import { PostgresCredentials } from 'src/engine/core-modules/postgres-credentials/postgres-credentials.entity';
+import { WorkspaceSSOIdentityProvider } from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
+import { TwoFactorMethod } from 'src/engine/core-modules/two-factor-method/two-factor-method.entity';
+import { UserWorkspace } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
+import { User } from 'src/engine/core-modules/user/user.entity';
+import { Workspace } from 'src/engine/core-modules/workspace/workspace.entity';
+import { DataSourceEntity } from 'src/engine/metadata-modules/data-source/data-source.entity';
 @Injectable()
 export class TypeORMService implements OnModuleInit, OnModuleDestroy {
   private mainDataSource: DataSource;
@@ -17,11 +28,37 @@ export class TypeORMService implements OnModuleInit, OnModuleDestroy {
 
   constructor(private readonly environmentService: EnvironmentService) {
     this.mainDataSource = new DataSource({
-      url: environmentService.getPGDatabaseUrl(),
+      url: environmentService.get('PG_DATABASE_URL'),
       type: 'postgres',
       logging: false,
       schema: 'core',
-      entities: [User, Workspace, RefreshToken, FeatureFlagEntity],
+      entities: [
+        User,
+        Workspace,
+        UserWorkspace,
+        AppToken,
+        KeyValuePair,
+        FeatureFlag,
+        BillingSubscription,
+        BillingSubscriptionItem,
+        BillingMeter,
+        BillingCustomer,
+        BillingProduct,
+        BillingPrice,
+        BillingEntitlement,
+        PostgresCredentials,
+        WorkspaceSSOIdentityProvider,
+        TwoFactorMethod,
+      ],
+      metadataTableName: '_typeorm_generated_columns_and_materialized_views',
+      ssl: environmentService.get('PG_SSL_ALLOW_SELF_SIGNED')
+        ? {
+            rejectUnauthorized: false,
+          }
+        : undefined,
+      extra: {
+        query_timeout: 10000,
+      },
     });
   }
 
@@ -29,11 +66,6 @@ export class TypeORMService implements OnModuleInit, OnModuleDestroy {
     return this.mainDataSource;
   }
 
-  /**
-   * Connects to a data source using metadata. Returns a cached connection if it exists.
-   * @param dataSource DataSourceEntity
-   * @returns Promise<DataSource | undefined>
-   */
   public async connectToDataSource(
     dataSource: DataSourceEntity,
   ): Promise<DataSource | undefined> {
@@ -72,12 +104,17 @@ export class TypeORMService implements OnModuleInit, OnModuleDestroy {
     const schema = dataSource.schema;
 
     const workspaceDataSource = new DataSource({
-      url: dataSource.url ?? this.environmentService.getPGDatabaseUrl(),
+      url: dataSource.url ?? this.environmentService.get('PG_DATABASE_URL'),
       type: 'postgres',
-      logging: this.environmentService.isDebugMode()
+      logging: this.environmentService.get('DEBUG_MODE')
         ? ['query', 'error']
         : ['error'],
       schema,
+      ssl: this.environmentService.get('PG_SSL_ALLOW_SELF_SIGNED')
+        ? {
+            rejectUnauthorized: false,
+          }
+        : undefined,
     });
 
     await workspaceDataSource.initialize();
@@ -85,12 +122,6 @@ export class TypeORMService implements OnModuleInit, OnModuleDestroy {
     return workspaceDataSource;
   }
 
-  /**
-   * Disconnects from a workspace data source.
-   * @param dataSourceId
-   * @returns Promise<void>
-   *
-   */
   public async disconnectFromDataSource(dataSourceId: string) {
     if (!this.dataSources.has(dataSourceId)) {
       return;
@@ -103,11 +134,6 @@ export class TypeORMService implements OnModuleInit, OnModuleDestroy {
     this.dataSources.delete(dataSourceId);
   }
 
-  /**
-   * Creates a new schema
-   * @param workspaceId
-   * @returns Promise<void>
-   */
   public async createSchema(schemaName: string): Promise<string> {
     const queryRunner = this.mainDataSource.createQueryRunner();
 

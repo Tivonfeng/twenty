@@ -1,27 +1,27 @@
-import { useFilterDropdown } from '@/object-record/object-filter-dropdown/hooks/useFilterDropdown';
+import { OBJECT_FILTER_DROPDOWN_ID } from '@/object-record/object-filter-dropdown/constants/ObjectFilterDropdownId';
+import { useResetFilterDropdown } from '@/object-record/object-filter-dropdown/hooks/useResetFilterDropdown';
 import { StyledHeaderDropdownButton } from '@/ui/layout/dropdown/components/StyledHeaderDropdownButton';
 import { useDropdown } from '@/ui/layout/dropdown/hooks/useDropdown';
-
-import { ObjectFilterDropdownId } from '../constants/ObjectFilterDropdownId';
+import { Trans } from '@lingui/react/macro';
 
 export const MultipleFiltersButton = () => {
-  const { resetFilter } = useFilterDropdown();
+  const { resetFilterDropdown } = useResetFilterDropdown();
 
-  const { isDropdownOpen, toggleDropdown } = useDropdown(
-    ObjectFilterDropdownId,
+  const { toggleDropdown, isDropdownOpen } = useDropdown(
+    OBJECT_FILTER_DROPDOWN_ID,
   );
 
   const handleClick = () => {
     toggleDropdown();
-    resetFilter();
+    resetFilterDropdown();
   };
 
   return (
     <StyledHeaderDropdownButton
-      isUnfolded={isDropdownOpen}
       onClick={handleClick}
+      isUnfolded={isDropdownOpen}
     >
-      Filter
+      <Trans>Filter</Trans>
     </StyledHeaderDropdownButton>
   );
 };

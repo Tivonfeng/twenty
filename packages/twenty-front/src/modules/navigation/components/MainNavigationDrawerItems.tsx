@@ -1,75 +1,83 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useLocation } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { IconSearch, IconSettings } from 'twenty-ui';
 
-import { useCurrentUserTaskCount } from '@/activities/tasks/hooks/useCurrentUserDueTaskCount';
 import { useCommandMenu } from '@/command-menu/hooks/useCommandMenu';
-import { Favorites } from '@/favorites/components/Favorites';
-import { ObjectMetadataNavItems } from '@/object-metadata/components/ObjectMetadataNavItems';
-import {
-  IconBell,
-  IconCheckbox,
-  IconSearch,
-  IconSettings,
-} from '@/ui/display/icon';
+import { CurrentWorkspaceMemberFavoritesFolders } from '@/favorites/components/CurrentWorkspaceMemberFavoritesFolders';
+import { WorkspaceFavorites } from '@/favorites/components/WorkspaceFavorites';
+import { NavigationDrawerOpenedSection } from '@/object-metadata/components/NavigationDrawerOpenedSection';
+import { RemoteNavigationDrawerSection } from '@/object-metadata/components/RemoteNavigationDrawerSection';
+import { SettingsPath } from '@/types/SettingsPath';
 import { NavigationDrawerItem } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerItem';
 import { NavigationDrawerSection } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSection';
-import { NavigationDrawerSectionTitle } from '@/ui/navigation/navigation-drawer/components/NavigationDrawerSectionTitle';
+import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
+import { navigationDrawerExpandedMemorizedState } from '@/ui/navigation/states/navigationDrawerExpandedMemorizedState';
 import { navigationMemorizedUrlState } from '@/ui/navigation/states/navigationMemorizedUrlState';
 import { useIsMobile } from '@/ui/utilities/responsive/hooks/useIsMobile';
+import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
+import styled from '@emotion/styled';
+import { useLingui } from '@lingui/react/macro';
+import { getSettingsPath } from '~/utils/navigation/getSettingsPath';
 
-import { useIsTasksPage } from '../hooks/useIsTasksPage';
+const StyledMainSection = styled(NavigationDrawerSection)`
+  min-height: fit-content;
+`;
+const StyledInnerContainer = styled.div`
+  height: 100%;
+`;
 
 export const MainNavigationDrawerItems = () => {
   const isMobile = useIsMobile();
-  const { toggleCommandMenu } = useCommandMenu();
-  const isTasksPage = useIsTasksPage();
-  const { currentUserDueTaskCount } = useCurrentUserTaskCount();
-  const navigate = useNavigate();
   const location = useLocation();
   const setNavigationMemorizedUrl = useSetRecoilState(
     navigationMemorizedUrlState,
   );
 
+  const [isNavigationDrawerExpanded, setIsNavigationDrawerExpanded] =
+    useRecoilState(isNavigationDrawerExpandedState);
+  const setNavigationDrawerExpandedMemorized = useSetRecoilState(
+    navigationDrawerExpandedMemorizedState,
+  );
+
+  const { t } = useLingui();
+
+  const { openRecordsSearchPage } = useCommandMenu();
+
   return (
     <>
       {!isMobile && (
-        <NavigationDrawerSection>
+        <StyledMainSection>
           <NavigationDrawerItem
-            label="Search"
+            label={t`Search`}
             Icon={IconSearch}
-            onClick={toggleCommandMenu}
-            keyboard={['⌘', 'K']}
+            onClick={openRecordsSearchPage}
+            keyboard={['/']}
           />
           <NavigationDrawerItem
-            label="Notifications"
-            to="/inbox"
-            Icon={IconBell}
-            soon
-          />
-          <NavigationDrawerItem
-            label="Settings"
+            label={t`Settings`}
+            to={getSettingsPath(SettingsPath.ProfilePage)}
             onClick={() => {
+              setNavigationDrawerExpandedMemorized(isNavigationDrawerExpanded);
+              setIsNavigationDrawerExpanded(true);
               setNavigationMemorizedUrl(location.pathname + location.search);
-              navigate('/settings/profile');
             }}
             Icon={IconSettings}
           />
-          <NavigationDrawerItem
-            label="Tasks"
-            to="/tasks"
-            active={isTasksPage}
-            Icon={IconCheckbox}
-            count={currentUserDueTaskCount}
-          />
-        </NavigationDrawerSection>
+        </StyledMainSection>
       )}
-
-      <Favorites />
-
-      <NavigationDrawerSection>
-        <NavigationDrawerSectionTitle label="Workspace" />
-        <ObjectMetadataNavItems />
-      </NavigationDrawerSection>
+      <ScrollWrapper
+        contextProviderName="navigationDrawer"
+        componentInstanceId={`scroll-wrapper-navigation-drawer`}
+        defaultEnableXScroll={false}
+        scrollbarVariant="no-padding"
+      >
+        <StyledInnerContainer>
+          <NavigationDrawerOpenedSection />
+          <CurrentWorkspaceMemberFavoritesFolders />
+          <WorkspaceFavorites />
+          <RemoteNavigationDrawerSection />
+        </StyledInnerContainer>
+      </ScrollWrapper>
     </>
   );
 };
