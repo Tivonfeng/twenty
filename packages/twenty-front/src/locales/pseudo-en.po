@@ -282,7 +282,7 @@ msgid "Add Field"
 msgstr ""
 
 #. js-lingui-id: vCSBPD
-#: src/modules/object-record/object-filter-dropdown/components/AddObjectFilterFromDetailsButton.tsx
+#: src/modules/views/components/ViewBarDetailsAddFilterButton.tsx
 msgid "Add filter"
 msgstr ""
 
@@ -366,8 +366,8 @@ msgid "Adjust the role-related settings"
 msgstr ""
 
 #. js-lingui-id: g1in8j
-#: src/pages/settings/admin-panel/SettingsAdminSecondaryEnvVariables.tsx
 #: src/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus.tsx
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
@@ -385,7 +385,7 @@ msgid "Advanced"
 msgstr ""
 
 #. js-lingui-id: tMFFwF
-#: src/modules/object-record/object-filter-dropdown/components/AdvancedFilterButton.tsx
+#: src/modules/views/components/ViewBarFilterDropdownAdvancedFilterButton.tsx
 msgid "Advanced filter"
 msgstr ""
 
@@ -892,6 +892,16 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+#. js-lingui-id: wu0RfR
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Clear the field or \"X\" to revert to environment/default value."
+msgstr ""
+
+#. js-lingui-id: b8wwse
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Click on the checkmark to apply your changes."
+msgstr ""
+
 #. js-lingui-id: b9Y4up
 #: src/modules/settings/security/components/SSO/SettingsSSOOIDCForm.tsx
 msgid "Client ID"
@@ -948,6 +958,13 @@ msgstr ""
 #. js-lingui-id: s2QZS6
 #: src/modules/action-menu/actions/record-actions/constants/DefaultRecordActionsConfig.tsx
 msgid "Companies"
+msgstr ""
+
+#. js-lingui-id: Vj43Y/
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
+#: src/modules/settings/admin-panel/config-variables/components/SettingsAdminConfigVariables.tsx
+#: src/modules/settings/admin-panel/components/SettingsAdminContent.tsx
+msgid "Config Variables"
 msgstr ""
 
 #. js-lingui-id: +zUMwJ
@@ -1051,7 +1068,7 @@ msgstr ""
 #. js-lingui-id: u+VWhB
 #: src/pages/settings/workspace/SettingsCustomDomainRecords.tsx
 #: src/modules/workflow/workflow-trigger/components/WorkflowEditTriggerWebhookForm.tsx
-#: src/modules/settings/admin-panel/components/SettingsAdminEnvCopyableText.tsx
+#: src/modules/settings/admin-panel/config-variables/components/SettingsAdminConfigCopyableText.tsx
 msgid "Copied to clipboard!"
 msgstr ""
 
@@ -1222,6 +1239,16 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
+#. js-lingui-id: R3PLzn
+#: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownCurrencySelect.tsx
+msgid "currencies"
+msgstr ""
+
+#. js-lingui-id: 6YzXhC
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Current value from server environment. Set a custom value to override."
+msgstr ""
+
 #. js-lingui-id: Hd06oy
 #: src/modules/settings/admin-panel/components/SettingsAdminVersionContainer.tsx
 msgid "Current version"
@@ -1320,6 +1347,11 @@ msgstr ""
 msgid "Data type"
 msgstr ""
 
+#. js-lingui-id: GEMJqo
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Database configuration is currently disabled."
+msgstr ""
+
 #. js-lingui-id: mYGY3B
 #: src/modules/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterMenuContent.tsx
 #: src/modules/object-record/record-table/record-table-footer/components/RecordTableColumnAggregateFooterDropdownContent.tsx
@@ -1385,6 +1417,11 @@ msgstr ""
 #. js-lingui-id: 4zuPQL
 #: src/modules/settings/data-model/fields/forms/phones/components/SettingsDataModelFieldPhonesForm.tsx
 msgid "Default Country Code"
+msgstr ""
+
+#. js-lingui-id: TlEEts
+#: src/modules/settings/admin-panel/config-variables/utils/useSourceContent.ts
+msgid "Default value"
 msgstr ""
 
 #. js-lingui-id: aQ8swY
@@ -1675,6 +1712,8 @@ msgstr ""
 #. js-lingui-id: ePK91l
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 #: src/modules/settings/data-model/object-details/components/SettingsObjectFieldDisabledActionDropdown.tsx
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableActionButtons.tsx
+#: src/modules/object-record/record-group/hooks/useRecordGroupActions.ts
 msgid "Edit"
 msgstr ""
 
@@ -1836,6 +1875,11 @@ msgstr ""
 msgid "Enjoy a {withCreditCardTrialPeriodDuration}-days free trial"
 msgstr ""
 
+#. js-lingui-id: oiVP/+
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableValueInput.tsx
+msgid "Enter a value to store in database"
+msgstr ""
+
 #. js-lingui-id: 9/30HU
 #: src/modules/settings/data-model/fields/forms/date/utils/getDisplayFormatSelectDescription.tsx
 msgid "Enter in <0>Unicode</0> format"
@@ -1868,7 +1912,12 @@ msgstr ""
 
 #. js-lingui-id: 7RnAWe
 #: src/modules/settings/admin-panel/components/SettingsAdminContent.tsx
-msgid "Env Variables"
+#~ msgid "Env Variables"
+#~ msgstr ""
+
+#. js-lingui-id: vPWtZ+
+#: src/modules/settings/admin-panel/config-variables/utils/useSourceContent.ts
+msgid "Environment variable"
 msgstr ""
 
 #. js-lingui-id: XOEl9R
@@ -1894,6 +1943,11 @@ msgstr ""
 #. js-lingui-id: WEltn2
 #: src/modules/settings/security/components/SSO/SettingsSecuritySSORowDropdownMenu.tsx
 msgid "Error editing SSO Identity Provider"
+msgstr ""
+
+#. js-lingui-id: 2GvilU
+#: src/modules/activities/timeline-activities/rows/message/components/EventCardMessage.tsx
+msgid "Error loading message"
 msgstr ""
 
 #. js-lingui-id: bj7nh3
@@ -2103,6 +2157,16 @@ msgstr ""
 msgid "Extra Credits Used"
 msgstr ""
 
+#. js-lingui-id: bVax4d
+#: src/modules/settings/admin-panel/config-variables/hooks/useConfigVariableActions.ts
+msgid "Failed to remove  override"
+msgstr ""
+
+#. js-lingui-id: Dzh4a2
+#: src/modules/settings/admin-panel/config-variables/hooks/useConfigVariableActions.ts
+msgid "Failed to update variable"
+msgstr ""
+
 #. js-lingui-id: jARNNi
 #: src/modules/settings/playground/components/PlaygroundSetupForm.tsx
 #~ msgid "Failed to validate API key. Please check your API key and try again."
@@ -2155,9 +2219,8 @@ msgid "Fields Count"
 msgstr ""
 
 #. js-lingui-id: o7J4JM
+#: src/modules/views/components/ViewBarFilterButton.tsx
 #: src/modules/object-record/record-table/record-table-header/components/RecordTableColumnHeadDropdownMenu.tsx
-#: src/modules/object-record/object-filter-dropdown/components/SingleEntityObjectFilterDropdownButton.tsx
-#: src/modules/object-record/object-filter-dropdown/components/MultipleFiltersButton.tsx
 msgid "Filter"
 msgstr ""
 
@@ -2341,6 +2404,7 @@ msgid "Greek"
 msgstr ""
 
 #. js-lingui-id: L8fEEm
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
 #: src/modules/object-record/object-options-dropdown/components/ObjectOptionsDropdownMenuContent.tsx
 #: src/modules/object-record/object-options-dropdown/components/ObjectOptionsDropdownLayoutContent.tsx
 msgid "Group"
@@ -2377,6 +2441,7 @@ msgstr ""
 
 #. js-lingui-id: vLyv1R
 #: src/modules/object-record/record-table/record-table-header/components/RecordTableColumnHeadDropdownMenu.tsx
+#: src/modules/object-record/record-group/hooks/useRecordGroupActions.ts
 msgid "Hide"
 msgstr ""
 
@@ -2408,6 +2473,11 @@ msgstr ""
 #. js-lingui-id: HS8BG/
 #: src/modules/object-record/object-options-dropdown/components/ObjectOptionsDropdownRecordGroupsContent.tsx
 msgid "Hide empty groups"
+msgstr ""
+
+#. js-lingui-id: wgmt7A
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
+msgid "Hide hidden groups"
 msgstr ""
 
 #. js-lingui-id: B06Bgk
@@ -2804,6 +2874,11 @@ msgstr ""
 msgid "Listings"
 msgstr ""
 
+#. js-lingui-id: Nx262D
+#: src/modules/activities/files/components/DocumentViewer.tsx
+msgid "Loading csv ... "
+msgstr ""
+
 #. js-lingui-id: s1MstR
 #: src/modules/settings/admin-panel/health-status/components/WorkerMetricsGraph.tsx
 msgid "Loading metrics data..."
@@ -2811,6 +2886,7 @@ msgstr ""
 
 #. js-lingui-id: Z3FXyt
 #: src/modules/settings/admin-panel/components/SettingsAdminVersionDisplay.tsx
+#: src/modules/activities/timeline-activities/rows/message/components/EventCardMessage.tsx
 msgid "Loading..."
 msgstr ""
 
@@ -2906,6 +2982,11 @@ msgstr ""
 msgid "Members"
 msgstr ""
 
+#. js-lingui-id: U15XwX
+#: src/modules/activities/timeline-activities/rows/message/components/EventCardMessage.tsx
+msgid "Message not found"
+msgstr ""
+
 #. js-lingui-id: elpx6r
 #: src/modules/settings/admin-panel/health-status/components/ConnectedAccountHealthStatus.tsx
 msgid "Message Sync"
@@ -2959,11 +3040,13 @@ msgstr ""
 
 #. js-lingui-id: iSLA/r
 #: src/modules/object-record/record-table/record-table-header/components/RecordTableColumnHeadDropdownMenu.tsx
+#: src/modules/object-record/record-group/hooks/useRecordGroupActions.ts
 msgid "Move left"
 msgstr ""
 
 #. js-lingui-id: Ubl2by
 #: src/modules/object-record/record-table/record-table-header/components/RecordTableColumnHeadDropdownMenu.tsx
+#: src/modules/object-record/record-group/hooks/useRecordGroupActions.ts
 msgid "Move right"
 msgstr ""
 
@@ -3136,6 +3219,11 @@ msgstr ""
 msgid "No change detected"
 msgstr ""
 
+#. js-lingui-id: YFLMyY
+#: src/modules/settings/admin-panel/config-variables/components/SettingsAdminConfigVariables.tsx
+msgid "No config variables match your current filters. Try adjusting your filters or search criteria."
+msgstr ""
+
 #. js-lingui-id: pwenQu
 #: src/modules/settings/accounts/components/SettingsAccountsListEmptyStateCard.tsx
 msgid "No connected account"
@@ -3239,6 +3327,7 @@ msgstr ""
 
 #. js-lingui-id: Ev2r9A
 #: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownCurrencySelect.tsx
+#: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownCountrySelect.tsx
 msgid "No results"
 msgstr ""
 
@@ -3255,6 +3344,11 @@ msgstr ""
 #. js-lingui-id: Hsl+kr
 #: src/modules/views/view-picker/components/ViewPickerContentCreateMode.tsx
 msgid "No Select field"
+msgstr ""
+
+#. js-lingui-id: A5XQ/A
+#: src/modules/settings/admin-panel/config-variables/components/SettingsAdminConfigVariables.tsx
+msgid "No variables found"
 msgstr ""
 
 #. js-lingui-id: 0uWxPM
@@ -3304,6 +3398,16 @@ msgstr ""
 #. js-lingui-id: pAtylB
 #: src/modules/object-record/record-field/form-types/components/VariableChip.tsx
 msgid "Not Found"
+msgstr ""
+
+#. js-lingui-id: 51G4/+
+#: src/modules/activities/calendar/components/CalendarEventNotSharedContent.tsx
+msgid "Not shared"
+msgstr ""
+
+#. js-lingui-id: uzFo/5
+#: src/modules/activities/timeline-activities/rows/message/components/EventCardMessageBodyNotShared.tsx
+msgid "Not shared by {notSharedByFullName}"
 msgstr ""
 
 #. js-lingui-id: hZWthZ
@@ -3416,8 +3520,8 @@ msgstr ""
 #. js-lingui-id: /IX/7x
 #: src/pages/settings/Releases.tsx
 #: src/pages/settings/lab/SettingsLab.tsx
-#: src/pages/settings/admin-panel/SettingsAdminSecondaryEnvVariables.tsx
 #: src/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus.tsx
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
 #: src/pages/settings/admin-panel/SettingsAdmin.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
 msgid "Other"
@@ -3426,13 +3530,13 @@ msgstr ""
 #. js-lingui-id: 3V8SRM
 #: src/pages/settings/admin-panel/SettingsAdminSecondaryEnvVariables.tsx
 #: src/pages/settings/admin-panel/SettingsAdminSecondaryEnvVariables.tsx
-msgid "Other Environment Variables"
-msgstr ""
+#~ msgid "Other Environment Variables"
+#~ msgstr ""
 
 #. js-lingui-id: P7KMWx
 #: src/modules/settings/admin-panel/components/SettingsAdminEnvVariables.tsx
-msgid "Other Variables"
-msgstr ""
+#~ msgid "Other Variables"
+#~ msgstr ""
 
 #. js-lingui-id: +vDFPm
 #: src/modules/ui/navigation/navigation-drawer/components/MultiWorkspaceDropdown/internal/MultiWorkspaceDropdownWorkspacesListComponents.tsx
@@ -3775,6 +3879,7 @@ msgid "Remove option"
 msgstr ""
 
 #. js-lingui-id: OfhWJH
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
 #: src/modules/views/components/ViewBarDetails.tsx
 msgid "Reset"
 msgstr ""
@@ -3787,6 +3892,16 @@ msgstr ""
 #. js-lingui-id: 1IWc1n
 #: src/modules/command-menu/components/ResetContextToSelectionCommandButton.tsx
 msgid "Reset to"
+msgstr ""
+
+#. js-lingui-id: Tj36Dr
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableActionButtons.tsx
+msgid "Reset to Default"
+msgstr ""
+
+#. js-lingui-id: 6rzsES
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
+msgid "Reset variable"
 msgstr ""
 
 #. js-lingui-id: WHiaOl
@@ -3867,6 +3982,7 @@ msgstr ""
 #. js-lingui-id: tfDRzk
 #: src/modules/settings/roles/role/components/SettingsRole.tsx
 #: src/modules/settings/components/SaveAndCancelButtons/SaveButton.tsx
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableActionButtons.tsx
 msgid "Save"
 msgstr ""
 
@@ -3928,16 +4044,27 @@ msgstr ""
 msgid "Search an index..."
 msgstr ""
 
+#. js-lingui-id: 3UPqHL
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableSearchInput.tsx
+msgid "Search config variables"
+msgstr ""
+
+#. js-lingui-id: WLfEv1
+#: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownCountrySelect.tsx
+msgid "Search country"
+msgstr ""
+
 #. js-lingui-id: sSARNY
 #: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownCurrencySelect.tsx
 msgid "Search currency"
 msgstr ""
 
 #. js-lingui-id: 7taA9j
+#: src/modules/views/components/ViewBarFilterDropdownFieldSelectMenu.tsx
 #: src/modules/object-record/object-sort-dropdown/components/ObjectSortDropdownButton.tsx
 #: src/modules/object-record/object-options-dropdown/components/ObjectOptionsDropdownRecordGroupFieldsContent.tsx
-#: src/modules/object-record/object-filter-dropdown/components/ObjectFilterDropdownFieldSelect.tsx
 #: src/modules/object-record/advanced-filter/components/AdvancedFilterFieldSelectSearchInput.tsx
+#: src/modules/object-record/advanced-filter/components/AdvancedFilterDropdownFieldSelectMenu.tsx
 msgid "Search fields"
 msgstr ""
 
@@ -4070,9 +4197,19 @@ msgstr ""
 msgid "Select file"
 msgstr ""
 
+#. js-lingui-id: llc/hA
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
+msgid "Select Group"
+msgstr ""
+
 #. js-lingui-id: ljSvAs
 #: src/modules/spreadsheet-import/steps/components/SelectHeaderStep/SelectHeaderStep.tsx
 msgid "Select header row"
+msgstr ""
+
+#. js-lingui-id: UKCiEd
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
+msgid "Select Source"
 msgstr ""
 
 #. js-lingui-id: mWHn81
@@ -4215,6 +4352,11 @@ msgstr ""
 msgid "Should changing an object's label also change the API?"
 msgstr ""
 
+#. js-lingui-id: 1OVrop
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
+msgid "Show hidden groups"
+msgstr ""
+
 #. js-lingui-id: qi+g0a
 #: src/modules/spreadsheet-import/steps/components/ValidationStep/ValidationStep.tsx
 msgid "Show only rows with errors"
@@ -4273,6 +4415,11 @@ msgstr ""
 msgid "Sort"
 msgstr ""
 
+#. js-lingui-id: wdxz7K
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableOptionsDropdownContent.tsx
+msgid "Source"
+msgstr ""
+
 #. js-lingui-id: 65A04M
 #: src/pages/settings/profile/appearance/components/LocalePicker.tsx
 msgid "Spanish"
@@ -4297,6 +4444,11 @@ msgstr ""
 #: src/pages/settings/admin-panel/SettingsAdminIndicatorHealthStatus.tsx
 #: src/modules/settings/admin-panel/components/SettingsAdminWorkspaceContent.tsx
 msgid "Status"
+msgstr ""
+
+#. js-lingui-id: qn1Xxf
+#: src/modules/settings/admin-panel/config-variables/utils/useSourceContent.ts
+msgid "Stored in database"
 msgstr ""
 
 #. js-lingui-id: ku9TbG
@@ -4334,6 +4486,11 @@ msgstr ""
 #. js-lingui-id: LYbP/A
 #: src/modules/settings/accounts/components/SettingsAccountsMessageVisibilityCard.tsx
 msgid "Subject and metadata will be shared with your team."
+msgstr ""
+
+#. js-lingui-id: DvSvG9
+#: src/modules/activities/timeline-activities/rows/message/components/EventCardMessageForbidden.tsx
+msgid "Subject not shared"
 msgstr ""
 
 #. js-lingui-id: J9ylmk
@@ -4586,8 +4743,8 @@ msgstr ""
 
 #. js-lingui-id: DHjmMm
 #: src/modules/settings/admin-panel/components/SettingsAdminEnvVariables.tsx
-msgid "These are only the server values. Ensure your worker environment has the same variables and values, this is required for asynchronous tasks like email sync."
-msgstr ""
+#~ msgid "These are only the server values. Ensure your worker environment has the same variables and values, this is required for asynchronous tasks like email sync."
+#~ msgstr ""
 
 #. js-lingui-id: hqCwGc
 #: src/pages/settings/SettingsWorkspaceMembers.tsx
@@ -4597,6 +4754,11 @@ msgstr ""
 #. js-lingui-id: gWGuHC
 #: src/modules/settings/profile/components/DeleteWorkspace.tsx
 msgid "This action cannot be undone. This will permanently delete your entire workspace. <0/> Please type in your email to confirm."
+msgstr ""
+
+#. js-lingui-id: SLIRqz
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "This database value overrides environment settings. "
 msgstr ""
 
 #. js-lingui-id: yHIStW
@@ -4619,9 +4781,29 @@ msgstr ""
 msgid "This role is assigned to these workspace members."
 msgstr ""
 
+#. js-lingui-id: C/wr0z
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "This setting can only be configured through environment variables."
+msgstr ""
+
+#. js-lingui-id: iAubP2
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "This should never happen"
+msgstr ""
+
+#. js-lingui-id: MMGDfe
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "This value will be saved to the database."
+msgstr ""
+
 #. js-lingui-id: yByRxz
 #: src/modules/settings/admin-panel/health-status/constants/WorkerQueueMetricsSelectOptions.ts
 msgid "This week"
+msgstr ""
+
+#. js-lingui-id: 4YifBe
+#: src/pages/settings/admin-panel/SettingsAdminConfigVariableDetails.tsx
+msgid "This will revert the database value to environment/default value. The database override will be removed and the system will use the environment settings."
 msgstr ""
 
 #. js-lingui-id: n9nSNJ
@@ -4828,9 +5010,30 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
+#. js-lingui-id: vUr1/5
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Using default application value. Configure via environment variables."
+msgstr ""
+
+#. js-lingui-id: 8Drj7i
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Using default value. Set a custom value to override."
+msgstr ""
+
 #. js-lingui-id: MGeZsN
 #: src/modules/spreadsheet-import/steps/components/SpreadsheetImportStepperContainer.tsx
 msgid "Validate data"
+msgstr ""
+
+#. js-lingui-id: wMHvYH
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableValueInput.tsx
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableValueInput.tsx
+msgid "Value"
+msgstr ""
+
+#. js-lingui-id: UZHvVi
+#: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
+msgid "Value is set in the server environment, it may be a different value on the worker."
 msgstr ""
 
 #. js-lingui-id: fXVIZq
@@ -4843,6 +5046,11 @@ msgstr ""
 #. js-lingui-id: dY/1ir
 #: src/modules/object-record/record-field/form-types/components/VariableChip.tsx
 msgid "Variable not found"
+msgstr ""
+
+#. js-lingui-id: N/89ho
+#: src/modules/settings/admin-panel/config-variables/hooks/useConfigVariableActions.ts
+msgid "Variable updated successfully"
 msgstr ""
 
 #. js-lingui-id: IHIWR4
@@ -4899,6 +5107,21 @@ msgstr ""
 #. js-lingui-id: 6n7jtr
 #: src/modules/settings/data-model/objects/components/SettingsObjectCoverImage.tsx
 msgid "Visualize"
+msgstr ""
+
+#. js-lingui-id: zFSQY3
+#: src/modules/activities/timeline-activities/rows/main-object/components/EventRowMainObject.tsx
+msgid "was created by"
+msgstr ""
+
+#. js-lingui-id: uHpu1c
+#: src/modules/activities/timeline-activities/rows/main-object/components/EventRowMainObject.tsx
+msgid "was deleted by"
+msgstr ""
+
+#. js-lingui-id: S0enzB
+#: src/modules/activities/timeline-activities/rows/main-object/components/EventRowMainObject.tsx
+msgid "was restored by"
 msgstr ""
 
 #. js-lingui-id: id6ein
